@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse
@@ -53,7 +53,7 @@ def toggle(item_id: int, request: Request, db: Session = Depends(get_db)):
         item.done_at = None
     else:
         item.status = ChecklistStatus.done
-        item.done_at = datetime.now(timezone.utc)
+        item.done_at = datetime.now(UTC)
     db.commit()
     return request.app.state.templates.TemplateResponse(
         request, "partials/checklist_item.html", {"i": item}

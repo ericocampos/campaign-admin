@@ -1,0 +1,24 @@
+<article>
+  <h2>Logs</h2>
+  <form hx-post="/campaigns/{{ campaign.slug }}/logs" hx-target="#tab-content">
+    <label>Category <input name="category" list="cat-list" required></label>
+    <datalist id="cat-list">
+      <option value="feature_request">
+      <option value="bug">
+      <option value="signal">
+      <option value="kill_switch">
+    </datalist>
+    <label>Title <input name="title" required></label>
+    <label>Notes (markdown) <textarea name="body" rows="3"></textarea></label>
+    <label>Source <input name="source" placeholder="where it came from"></label>
+    <button type="submit">Add</button>
+  </form>
+  <p><strong>Filter:</strong>
+    <a href="#" hx-get="/campaigns/{{ campaign.slug }}/logs" hx-target="#tab-content">all</a>
+    {% for cat in categories %}
+      · <a href="#" hx-get="/campaigns/{{ campaign.slug }}/logs?category={{ cat }}" hx-target="#tab-content">{{ cat }} ({{ category_counts[cat] }})</a>
+    {% endfor %}
+  </p>
+  {% for le in entries %}{% include "partials/log_entry.html" %}{% endfor %}
+  {% if not entries %}<p class="muted">No entries.</p>{% endif %}
+</article>

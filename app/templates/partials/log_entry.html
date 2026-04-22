@@ -1,0 +1,7 @@
+<div class="log-card" id="le-{{ le.id }}">
+  <strong>[{{ le.category }}]</strong> {{ le.title }}
+  <span class="muted">· ×{{ le.count }} · {{ le.occurred_at.strftime("%Y-%m-%d %H:%M") }}{% if le.source %} · {{ le.source }}{% endif %}</span>
+  <div>{{ rendered.get(le.id, "") | safe }}</div>
+  <button hx-post="/logs/{{ le.id }}/increment" hx-target="#le-{{ le.id }}" hx-swap="outerHTML">+1</button>
+  <button hx-post="/logs/{{ le.id }}/delete" hx-confirm="Delete?" hx-target="#le-{{ le.id }}" hx-swap="outerHTML" class="secondary">×</button>
+</div>
