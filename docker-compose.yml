@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    ports:
+      - "127.0.0.1:8001:8001"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DATABASE_URL=sqlite:////app/data/campaign-admin.db
+      - APP_HOST=127.0.0.1
+      - APP_PORT=8001
+      - ENV=${ENV:-prod}
+      - CSRF_ENABLED=true
+      - IN_DOCKER=1
+    restart: unless-stopped
