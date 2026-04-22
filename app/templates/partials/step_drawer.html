@@ -1,0 +1,26 @@
+<div class="drawer" id="step-drawer">
+  <h3>Step {{ step.sequence }}: {{ step.name }}</h3>
+  <form hx-post="/campaigns/{{ campaign.slug }}/steps/{{ step.id }}" hx-target="#tab-content">
+    <label>Sequence <input type="number" name="sequence" value="{{ step.sequence }}"></label>
+    <label>Name <input name="name" value="{{ step.name }}" required></label>
+    <label>Channel <input name="channel" value="{{ step.channel }}"></label>
+    <label>Status
+      <select name="status">
+        {% for s in ["planned","live","done","skipped"] %}<option value="{{ s }}" {% if step.status.value == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>URL <input name="url" value="{{ step.url or '' }}"></label>
+    <label>Scheduled at <input type="datetime-local" name="scheduled_at" value="{{ step.scheduled_at.strftime('%Y-%m-%dT%H:%M') if step.scheduled_at else '' }}"></label>
+    <label>Posted at <input type="datetime-local" name="posted_at" value="{{ step.posted_at.strftime('%Y-%m-%dT%H:%M') if step.posted_at else '' }}"></label>
+    <label>Content (markdown) <textarea name="content" rows="8">{{ step.content }}</textarea></label>
+    <label>Retro (markdown) <textarea name="retro" rows="6">{{ step.retro }}</textarea></label>
+    <fieldset>
+      <legend>Metrics</legend>
+      {% for key in ["upvotes_24h","upvotes_7d","comments","subs_gained"] %}
+        <label>{{ key }} <input type="number" name="metric_{{ key }}" value="{{ step.metrics.get(key, '') }}"></label>
+      {% endfor %}
+    </fieldset>
+    <button type="submit">Save</button>
+    <button type="button" class="secondary" onclick="document.getElementById('step-drawer').innerHTML=''">Close</button>
+  </form>
+</div>
