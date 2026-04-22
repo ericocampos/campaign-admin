@@ -1,0 +1,8 @@
+<div id="ci-{{ i.id }}" style="display:flex; gap:0.5rem; align-items:center; padding:0.3rem 0;">
+  <button hx-post="/checklist/{{ i.id }}/toggle" hx-target="#ci-{{ i.id }}" hx-swap="outerHTML" style="width:2rem">
+    {% if i.status.value == "done" %}✓{% elif i.status.value == "blocked" %}✗{% else %}·{% endif %}
+  </button>
+  <span style="flex:1; {% if i.status.value == 'done' %}text-decoration: line-through; opacity:0.6{% endif %}">{{ i.text }}</span>
+  <span class="muted">{{ i.notes }}</span>
+  <button hx-post="/checklist/{{ i.id }}/delete" hx-confirm="Delete?" hx-target="#ci-{{ i.id }}" hx-swap="outerHTML" class="secondary">×</button>
+</div>

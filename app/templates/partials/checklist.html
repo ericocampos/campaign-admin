@@ -1,0 +1,17 @@
+<article>
+  <h2>Checklist</h2>
+  <form hx-post="/campaigns/{{ campaign.slug }}/checklist" hx-target="#tab-content">
+    <label>Group <input name="group_name" placeholder="Phase 0 prereqs"></label>
+    <label>Text <input name="text" required></label>
+    <button type="submit">Add</button>
+  </form>
+  {% set groups = {} %}
+  {% for i in campaign.checklist_items %}
+    {% set k = i.group_name or "Ungrouped" %}
+    {% if groups.update({k: groups.get(k, []) + [i]}) %}{% endif %}
+  {% endfor %}
+  {% for group, items in groups.items() %}
+    <h3>{{ group }}</h3>
+    {% for i in items %}{% include "partials/checklist_item.html" %}{% endfor %}
+  {% endfor %}
+</article>
