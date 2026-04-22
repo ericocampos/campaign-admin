@@ -76,3 +76,17 @@ def test_checklist_item_create(session):
     session.commit()
     assert len(c.checklist_items) == 1
     assert c.checklist_items[0].text == "Do a thing"
+
+
+from app.models import LogEntry
+
+
+def test_log_entry_defaults(session):
+    c = Campaign(slug="c4", name="C4")
+    c.log_entries.append(LogEntry(category="bug", title="Crash on open"))
+    session.add(c)
+    session.commit()
+    le = c.log_entries[0]
+    assert le.count == 1
+    assert le.body == ""
+    assert le.occurred_at is not None
