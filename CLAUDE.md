@@ -29,3 +29,4 @@ Single-process FastAPI + SQLAlchemy + Jinja + HTMX. No SPA, no build step. SQLit
 ## Not in scope
 
 Auth, file uploads, multi-user, production deploy, reminders, drag-drop, charts. Do not add these without a new spec.
+
