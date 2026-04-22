@@ -4,6 +4,7 @@ def test_health_returns_ok():
     os.environ.setdefault("SECRET_KEY", "t")
     os.environ.setdefault("DATABASE_URL", "sqlite:///:memory:")
     from fastapi.testclient import TestClient
+
     from app.main import create_app
     app = create_app()
     client = TestClient(app)
