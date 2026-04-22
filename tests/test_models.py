@@ -61,3 +61,18 @@ def test_step_cascade_delete(session):
     session.delete(c)
     session.commit()
     assert session.get(Step, step_id) is None
+
+
+from app.models import ChecklistItem, ChecklistStatus
+
+
+def test_checklist_item_create(session):
+    c = Campaign(slug="c3", name="C3")
+    c.checklist_items.append(
+        ChecklistItem(group_name="Phase 0", sequence=1, text="Do a thing",
+                      status=ChecklistStatus.pending)
+    )
+    session.add(c)
+    session.commit()
+    assert len(c.checklist_items) == 1
+    assert c.checklist_items[0].text == "Do a thing"
