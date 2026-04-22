@@ -35,6 +35,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
+ignore = ["B008"]  # FastAPI uses Depends/Form in argument defaults by design
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

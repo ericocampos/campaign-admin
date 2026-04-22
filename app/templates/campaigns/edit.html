@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Edit {{ campaign.name }}</h1>
+<form hx-post="/campaigns/{{ campaign.slug }}/edit" hx-swap="none">
+  <label>Name <input name="name" value="{{ campaign.name }}" required></label>
+  <label>Slug <input name="slug" value="{{ campaign.slug }}" required></label>
+  <label>Status
+    <select name="status">
+      {% for s in ["draft","active","paused","done","archived"] %}
+        <option value="{{ s }}" {% if campaign.status.value == s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Start date <input type="date" name="start_date" value="{{ campaign.start_date or '' }}"></label>
+  <label>End date <input type="date" name="end_date" value="{{ campaign.end_date or '' }}"></label>
+  <label>Overview <textarea name="overview" rows="12">{{ campaign.overview }}</textarea></label>
+  <button type="submit">Save</button>
+  <a role="button" class="secondary" href="/campaigns/{{ campaign.slug }}">Cancel</a>
+</form>
+<hr>
+<form hx-post="/campaigns/{{ campaign.slug }}/archive" hx-confirm="Archive this campaign?">
+  <button type="submit" class="secondary">Archive</button>
+</form>
+{% endblock %}

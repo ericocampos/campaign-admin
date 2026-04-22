@@ -71,3 +71,36 @@ def test_overview_partial_renders_markdown(client, session):
     r = client.get("/campaigns/o/overview")
     assert r.status_code == 200
     assert "<h1>Hello</h1>" in r.text
+
+
+def test_edit_form_prefilled(client, session):
+    session.add(Campaign(slug="e1", name="Name1", overview="ov"))
+    session.commit()
+    r = client.get("/campaigns/e1/edit")
+    assert r.status_code == 200
+    assert 'value="Name1"' in r.text
+    assert "ov" in r.text
+
+
+def test_update_campaign(client, session):
+    session.add(Campaign(slug="u1", name="Old"))
+    session.commit()
+    r = client.post(
+        "/campaigns/u1/edit",
+        data={"name": "New", "slug": "u1", "status": "active", "overview": "x"},
+        follow_redirects=False,
+    )
+    assert r.status_code in (302, 303)
+    session.expire_all()
+    c = session.query(Campaign).filter_by(slug="u1").one()
+    assert c.name == "New"
+    assert c.status.value == "active"
+
+
+def test_archive_campaign(client, session):
+    session.add(Campaign(slug="a1", name="A"))
+    session.commit()
+    r = client.post("/campaigns/a1/archive", follow_redirects=False)
+    assert r.status_code in (302, 303)
+    session.expire_all()
+    assert session.query(Campaign).filter_by(slug="a1").one().status.value == "archived"
