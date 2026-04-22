@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ campaign.name }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb"><ul><li><a href="/">Campaigns</a></li><li>{{ campaign.name }}</li></ul></nav>
+<h1>{{ campaign.name }} <small class="muted">({{ campaign.status.value }})</small></h1>
+<div class="tabs">
+  <a href="#" hx-get="/campaigns/{{ campaign.slug }}/overview" hx-target="#tab-content" class="active">Overview</a>
+  <a href="#" hx-get="/campaigns/{{ campaign.slug }}/steps" hx-target="#tab-content">Steps</a>
+  <a href="#" hx-get="/campaigns/{{ campaign.slug }}/checklist" hx-target="#tab-content">Checklist</a>
+  <a href="#" hx-get="/campaigns/{{ campaign.slug }}/logs" hx-target="#tab-content">Logs</a>
+  <a href="/campaigns/{{ campaign.slug }}/edit" style="margin-left:auto">Edit</a>
+</div>
+<div id="tab-content">
+  {% include "partials/overview.html" %}
+</div>
+{% endblock %}

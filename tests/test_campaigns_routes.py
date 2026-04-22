@@ -46,3 +46,28 @@ def test_create_rejects_duplicate_slug(client, session):
     session.commit()
     r = client.post("/campaigns", data={"name": "B", "slug": "dup"})
     assert r.status_code == 400
+
+
+def test_show_renders_dashboard(client, session):
+    session.add(Campaign(slug="rl2", name="Reddit Launch 2", overview="# Reddit"))
+    session.commit()
+    r = client.get("/campaigns/rl2")
+    assert r.status_code == 200
+    assert "Reddit Launch 2" in r.text
+    assert "Overview" in r.text
+    assert "Steps" in r.text
+    assert "Checklist" in r.text
+    assert "Logs" in r.text
+
+
+def test_show_404_for_missing(client):
+    r = client.get("/campaigns/missing")
+    assert r.status_code == 404
+
+
+def test_overview_partial_renders_markdown(client, session):
+    session.add(Campaign(slug="o", name="O", overview="# Hello"))
+    session.commit()
+    r = client.get("/campaigns/o/overview")
+    assert r.status_code == 200
+    assert "<h1>Hello</h1>" in r.text

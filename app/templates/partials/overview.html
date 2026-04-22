@@ -1,0 +1,14 @@
+<article>
+  <h2>Overview</h2>
+  {% if rendered_overview %}
+    {{ rendered_overview|safe }}
+  {% else %}
+    <p class="muted">No overview yet. <a href="/campaigns/{{ campaign.slug }}/edit">Add one</a>.</p>
+  {% endif %}
+  <hr>
+  <p class="muted">
+    Steps: {{ campaign.steps|length }} ·
+    Checklist: {{ checklist_done }}/{{ checklist_total }} ·
+    Log entries: {{ campaign.log_entries|length }}
+  </p>
+</article>
