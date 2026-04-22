@@ -1,4 +1,5 @@
 import os
+import re
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -22,6 +23,17 @@ def create_app() -> FastAPI:
 
     app = FastAPI(title="Campaign Admin", version="0.1.0")
     app.add_middleware(SecurityHeadersMiddleware)
+    if settings.csrf_enabled:
+        from starlette_csrf import CSRFMiddleware
+        app.add_middleware(
+            CSRFMiddleware,
+            secret=settings.secret_key,
+            cookie_name="csrftoken",
+            header_name="x-csrftoken",
+            cookie_secure=False,
+            cookie_samesite="strict",
+            exempt_urls=[re.compile(r"^/health$"), re.compile(r"^/static/.*")],
+        )
     app.state.templates = Jinja2Templates(directory="app/templates")
     app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
