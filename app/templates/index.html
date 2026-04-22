@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Campaigns</h1>
+<p><a role="button" href="/campaigns/new">New campaign</a></p>
+{% if campaigns %}
+<table>
+  <thead><tr><th>Name</th><th>Status</th><th>Start</th><th>Steps</th><th>Updated</th></tr></thead>
+  <tbody>
+  {% for c in campaigns %}
+    <tr>
+      <td><a href="/campaigns/{{ c.slug }}">{{ c.name }}</a></td>
+      <td>{{ c.status.value }}</td>
+      <td>{{ c.start_date or "" }}</td>
+      <td>{{ c.steps|length }}</td>
+      <td>{{ c.updated_at.strftime("%Y-%m-%d") }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No campaigns yet. <a href="/campaigns/new">Create your first</a>.</p>
+{% endif %}
+{% endblock %}

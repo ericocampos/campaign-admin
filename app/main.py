@@ -1,6 +1,8 @@
 import os
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 from app.config import Settings
 from app.db import init_db
@@ -20,6 +22,9 @@ def create_app() -> FastAPI:
 
     app = FastAPI(title="Campaign Admin", version="0.1.0")
     app.add_middleware(SecurityHeadersMiddleware)
+    app.state.templates = Jinja2Templates(directory="app/templates")
+    app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
     app.include_router(health.router)
     app.include_router(md_routes.router)
     return app
