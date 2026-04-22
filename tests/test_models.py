@@ -47,8 +47,14 @@ def test_step_belongs_to_campaign(session):
     c = Campaign(slug="c1", name="C1")
     session.add(c)
     session.commit()
-    s = Step(campaign_id=c.id, sequence=1, name="Week 1", channel="r/SideProject",
-             status=StepStatus.planned, metrics={"upvotes_24h": 0})
+    s = Step(
+        campaign_id=c.id,
+        sequence=1,
+        name="Week 1",
+        channel="r/SideProject",
+        status=StepStatus.planned,
+        metrics={"upvotes_24h": 0},
+    )
     session.add(s)
     session.commit()
     session.refresh(s)
@@ -71,8 +77,9 @@ def test_step_cascade_delete(session):
 def test_checklist_item_create(session):
     c = Campaign(slug="c3", name="C3")
     c.checklist_items.append(
-        ChecklistItem(group_name="Phase 0", sequence=1, text="Do a thing",
-                      status=ChecklistStatus.pending)
+        ChecklistItem(
+            group_name="Phase 0", sequence=1, text="Do a thing", status=ChecklistStatus.pending
+        )
     )
     session.add(c)
     session.commit()

@@ -14,6 +14,7 @@ router = APIRouter()
 
 # ── Index ────────────────────────────────────────────────────────────────────
 
+
 @router.get("/", response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
     campaigns = db.query(Campaign).order_by(Campaign.updated_at.desc()).all()
@@ -24,11 +25,10 @@ def index(request: Request, db: Session = Depends(get_db)):
 
 # ── New / Create ─────────────────────────────────────────────────────────────
 
+
 @router.get("/campaigns/new", response_class=HTMLResponse)
 def new_form(request: Request):
-    return request.app.state.templates.TemplateResponse(
-        request, "campaigns/new.html", {}
-    )
+    return request.app.state.templates.TemplateResponse(request, "campaigns/new.html", {})
 
 
 @router.post("/campaigns")
@@ -61,6 +61,7 @@ def create(
 
 
 # ── Show ─────────────────────────────────────────────────────────────────────
+
 
 def _get_or_404(db: Session, slug: str) -> Campaign:
     c = db.query(Campaign).filter_by(slug=slug).first()
@@ -97,6 +98,7 @@ def overview_tab(slug: str, request: Request, db: Session = Depends(get_db)):
 
 
 # ── Edit / Update / Archive ───────────────────────────────────────────────────
+
 
 @router.get("/campaigns/{slug}/edit", response_class=HTMLResponse)
 def edit_form(slug: str, request: Request, db: Session = Depends(get_db)):

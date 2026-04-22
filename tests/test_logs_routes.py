@@ -37,10 +37,12 @@ def test_increment_log(client, session):
 
 def test_filter_logs_by_category(client, session):
     c = _mk(session)
-    session.add_all([
-        LogEntry(campaign_id=c.id, category="bug", title="B"),
-        LogEntry(campaign_id=c.id, category="signal", title="S"),
-    ])
+    session.add_all(
+        [
+            LogEntry(campaign_id=c.id, category="bug", title="B"),
+            LogEntry(campaign_id=c.id, category="signal", title="S"),
+        ]
+    )
     session.commit()
     r = client.get("/campaigns/lg/logs?category=signal")
     assert "S" in r.text

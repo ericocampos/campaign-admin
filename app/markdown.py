@@ -2,10 +2,30 @@ import bleach
 import markdown2
 
 ALLOWED_TAGS = [
-    "p", "h1", "h2", "h3", "h4", "h5", "h6",
-    "ul", "ol", "li", "a", "code", "pre", "blockquote",
-    "strong", "em", "hr", "br",
-    "table", "thead", "tbody", "tr", "th", "td",
+    "p",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "ul",
+    "ol",
+    "li",
+    "a",
+    "code",
+    "pre",
+    "blockquote",
+    "strong",
+    "em",
+    "hr",
+    "br",
+    "table",
+    "thead",
+    "tbody",
+    "tr",
+    "th",
+    "td",
 ]
 
 ALLOWED_ATTRS = {

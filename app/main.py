@@ -22,6 +22,7 @@ def create_app() -> FastAPI:
         ensure_loopback_bind(settings.app_host)
 
     import app.db as db_module
+
     if db_module._engine is None:
         init_db(settings.database_url)
 
@@ -29,6 +30,7 @@ def create_app() -> FastAPI:
     app.add_middleware(SecurityHeadersMiddleware)
     if settings.csrf_enabled:
         from starlette_csrf import CSRFMiddleware
+
         app.add_middleware(
             CSRFMiddleware,
             secret=settings.secret_key,

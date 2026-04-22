@@ -44,8 +44,12 @@ def create_step(
 ):
     campaign = _get_campaign(db, slug)
     s = Step(
-        campaign_id=campaign.id, sequence=sequence, name=name, channel=channel,
-        status=StepStatus(status), metrics={},
+        campaign_id=campaign.id,
+        sequence=sequence,
+        name=name,
+        channel=channel,
+        status=StepStatus(status),
+        metrics={},
     )
     db.add(s)
     db.commit()
@@ -71,7 +75,10 @@ def _parse_dt(s: str | None) -> datetime | None:
 
 @router.post("/campaigns/{slug}/steps/{step_id}", response_class=HTMLResponse)
 async def update_step(
-    slug: str, step_id: int, request: Request, db: Session = Depends(get_db),
+    slug: str,
+    step_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
 ):
     step = _get_step(db, slug, step_id)
     form = await request.form()
@@ -91,9 +98,9 @@ async def update_step(
             if v == "" or v is None:
                 continue
             try:
-                metrics[key[len("metric_"):]] = int(v)
+                metrics[key[len("metric_") :]] = int(v)
             except ValueError:
-                metrics[key[len("metric_"):]] = v
+                metrics[key[len("metric_") :]] = v
     step.metrics = metrics
     db.commit()
     db.refresh(step.campaign)

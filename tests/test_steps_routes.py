@@ -17,10 +17,16 @@ def test_steps_tab_empty(client, session):
 
 def test_steps_tab_lists(client, session):
     c = _mk_campaign(session)
-    session.add(Step(
-        campaign_id=c.id, sequence=1, name="Wk1", channel="r/x",
-        status=StepStatus.planned, metrics={},
-    ))
+    session.add(
+        Step(
+            campaign_id=c.id,
+            sequence=1,
+            name="Wk1",
+            channel="r/x",
+            status=StepStatus.planned,
+            metrics={},
+        )
+    )
     session.commit()
     r = client.get("/campaigns/c/steps")
     assert "Wk1" in r.text
@@ -41,8 +47,13 @@ def test_create_step(client, session):
 def test_step_drawer(client, session):
     c = _mk_campaign(session, "d1")
     s = Step(
-        campaign_id=c.id, sequence=1, name="X", channel="",
-        status=StepStatus.planned, metrics={}, content="# hello",
+        campaign_id=c.id,
+        sequence=1,
+        name="X",
+        channel="",
+        status=StepStatus.planned,
+        metrics={},
+        content="# hello",
     )
     session.add(s)
     session.commit()
@@ -55,16 +66,25 @@ def test_step_drawer(client, session):
 def test_step_update(client, session):
     c = _mk_campaign(session, "u")
     s = Step(
-        campaign_id=c.id, sequence=1, name="A", channel="",
-        status=StepStatus.planned, metrics={},
+        campaign_id=c.id,
+        sequence=1,
+        name="A",
+        channel="",
+        status=StepStatus.planned,
+        metrics={},
     )
     session.add(s)
     session.commit()
     r = client.post(
         f"/campaigns/u/steps/{s.id}",
         data={
-            "sequence": "2", "name": "B", "channel": "x", "status": "live",
-            "url": "https://e.com", "content": "c", "retro": "r",
+            "sequence": "2",
+            "name": "B",
+            "channel": "x",
+            "status": "live",
+            "url": "https://e.com",
+            "content": "c",
+            "retro": "r",
         },
     )
     assert r.status_code in (200, 204)
@@ -77,8 +97,12 @@ def test_step_update(client, session):
 def test_step_delete(client, session):
     c = _mk_campaign(session, "x")
     s = Step(
-        campaign_id=c.id, sequence=1, name="A", channel="",
-        status=StepStatus.planned, metrics={},
+        campaign_id=c.id,
+        sequence=1,
+        name="A",
+        channel="",
+        status=StepStatus.planned,
+        metrics={},
     )
     session.add(s)
     session.commit()

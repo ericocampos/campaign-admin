@@ -43,6 +43,7 @@ def app_with_db(engine, session_factory, monkeypatch):
     monkeypatch.setenv("ENV", "test")
     monkeypatch.setenv("CSRF_ENABLED", "false")
     from app.main import create_app
+
     db_module._engine = engine
     db_module._session_factory = session_factory
     app = create_app()

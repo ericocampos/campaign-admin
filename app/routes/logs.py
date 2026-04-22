@@ -34,7 +34,9 @@ def _ctx(campaign: Campaign, filter_cat: str | None = None) -> dict:
 
 @router.get("/campaigns/{slug}/logs", response_class=HTMLResponse)
 def tab(
-    slug: str, request: Request, category: str | None = None,
+    slug: str,
+    request: Request,
+    category: str | None = None,
     db: Session = Depends(get_db),
 ):
     return request.app.state.templates.TemplateResponse(
@@ -44,15 +46,21 @@ def tab(
 
 @router.post("/campaigns/{slug}/logs", response_class=HTMLResponse)
 def create(
-    slug: str, request: Request,
-    category: str = Form(...), title: str = Form(...),
-    body: str = Form(default=""), source: str = Form(default=""),
+    slug: str,
+    request: Request,
+    category: str = Form(...),
+    title: str = Form(...),
+    body: str = Form(default=""),
+    source: str = Form(default=""),
     db: Session = Depends(get_db),
 ):
     campaign = _campaign(db, slug)
     le = LogEntry(
-        campaign_id=campaign.id, category=category, title=title,
-        body=body, source=source or None,
+        campaign_id=campaign.id,
+        category=category,
+        title=title,
+        body=body,
+        source=source or None,
     )
     db.add(le)
     db.commit()
@@ -70,7 +78,8 @@ def increment(log_id: int, request: Request, db: Session = Depends(get_db)):
     le.count += 1
     db.commit()
     return request.app.state.templates.TemplateResponse(
-        request, "partials/log_entry.html",
+        request,
+        "partials/log_entry.html",
         {
             "le": le,
             "rendered": {le.id: render_markdown(le.body) if le.body else ""},

@@ -10,9 +10,11 @@ def csrf_client(engine, session_factory, monkeypatch):
     monkeypatch.setenv("ENV", "test")
     monkeypatch.setenv("CSRF_ENABLED", "true")
     import app.db as db_module
+
     db_module._engine = engine
     db_module._session_factory = session_factory
     from app.main import create_app
+
     app = create_app()
     client = TestClient(app)
     yield client
@@ -41,6 +43,7 @@ def test_csrf_allows_post_with_token(csrf_client):
 
 def test_base_template_embeds_csrf_in_hx_headers():
     from pathlib import Path
+
     base = Path("app/templates/base.html").read_text()
     assert "hx-headers" in base
     assert "x-csrftoken" in base
