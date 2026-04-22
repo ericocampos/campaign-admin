@@ -33,3 +33,31 @@ def test_campaign_status_transitions(session):
     session.commit()
     session.refresh(c)
     assert c.status == CampaignStatus.paused
+
+
+from app.models import Step, StepStatus
+
+
+def test_step_belongs_to_campaign(session):
+    c = Campaign(slug="c1", name="C1")
+    session.add(c)
+    session.commit()
+    s = Step(campaign_id=c.id, sequence=1, name="Week 1", channel="r/SideProject",
+             status=StepStatus.planned, metrics={"upvotes_24h": 0})
+    session.add(s)
+    session.commit()
+    session.refresh(s)
+    assert s.id is not None
+    assert s.metrics == {"upvotes_24h": 0}
+    assert s.campaign.slug == "c1"
+
+
+def test_step_cascade_delete(session):
+    c = Campaign(slug="c2", name="C2")
+    c.steps.append(Step(sequence=1, name="S1", channel="x", status=StepStatus.planned, metrics={}))
+    session.add(c)
+    session.commit()
+    step_id = c.steps[0].id
+    session.delete(c)
+    session.commit()
+    assert session.get(Step, step_id) is None
