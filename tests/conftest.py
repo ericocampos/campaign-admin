@@ -1,9 +1,11 @@
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
 
 from app import db as db_module
-from app.db import build_engine, build_session_factory
+from app.db import build_session_factory
 
 try:
     from app.models import Base  # populated in Phase 2
@@ -13,7 +15,11 @@ except ImportError:
 
 @pytest.fixture
 def engine():
-    return build_engine("sqlite:///:memory:")
+    return create_engine(
+        "sqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
 
 
 @pytest.fixture

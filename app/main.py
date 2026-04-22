@@ -7,6 +7,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.config import Settings
 from app.db import init_db
+from app.routes import campaigns as campaign_routes
 from app.routes import health
 from app.routes import markdown as md_routes
 from app.security import SecurityHeadersMiddleware, ensure_loopback_bind
@@ -39,4 +40,5 @@ def create_app() -> FastAPI:
 
     app.include_router(health.router)
     app.include_router(md_routes.router)
+    app.include_router(campaign_routes.router)
     return app
