@@ -1,0 +1,40 @@
+<article>
+  <h2>Steps</h2>
+  <details>
+    <summary>Add step</summary>
+    <form hx-post="/campaigns/{{ campaign.slug }}/steps" hx-target="#tab-content">
+      <label>Sequence <input type="number" name="sequence" value="{{ (campaign.steps|length) + 1 }}"></label>
+      <label>Name <input name="name" required></label>
+      <label>Channel <input name="channel" placeholder="r/SideProject"></label>
+      <label>Status
+        <select name="status">
+          {% for s in ["planned","live","done","skipped"] %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+        </select>
+      </label>
+      <button type="submit">Add</button>
+    </form>
+  </details>
+  {% if campaign.steps %}
+  <table>
+    <thead><tr><th>#</th><th>Name</th><th>Channel</th><th>Status</th><th>URL</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for s in campaign.steps %}
+      <tr>
+        <td>{{ s.sequence }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.channel }}</td>
+        <td>{{ s.status.value }}</td>
+        <td>{% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener">link</a>{% endif %}</td>
+        <td>
+          <button hx-get="/campaigns/{{ campaign.slug }}/steps/{{ s.id }}" hx-target="#step-drawer">Open</button>
+          <button hx-post="/campaigns/{{ campaign.slug }}/steps/{{ s.id }}/delete" hx-confirm="Delete?" hx-target="#tab-content" class="secondary">Delete</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div id="step-drawer"></div>
+  {% else %}
+  <p class="muted">No steps yet.</p>
+  {% endif %}
+</article>
