@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from app.config import Settings
 from app.db import init_db
 from app.routes import health
+from app.routes import markdown as md_routes
 from app.security import SecurityHeadersMiddleware, ensure_loopback_bind
 
 
@@ -20,4 +21,5 @@ def create_app() -> FastAPI:
     app = FastAPI(title="Campaign Admin", version="0.1.0")
     app.add_middleware(SecurityHeadersMiddleware)
     app.include_router(health.router)
+    app.include_router(md_routes.router)
     return app
