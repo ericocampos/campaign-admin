@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>New campaign</h1>
+<form hx-post="/campaigns" hx-swap="none">
+  <label>Name <input name="name" required maxlength="200"></label>
+  <label>Slug (auto if empty) <input name="slug" maxlength="100"></label>
+  <label>Status
+    <select name="status">
+      <option value="draft" selected>draft</option>
+      <option value="active">active</option>
+      <option value="paused">paused</option>
+      <option value="done">done</option>
+      <option value="archived">archived</option>
+    </select>
+  </label>
+  <label>Start date <input type="date" name="start_date"></label>
+  <label>End date <input type="date" name="end_date"></label>
+  <label>Overview (markdown)
+    <textarea name="overview" rows="6"></textarea>
+  </label>
+  <button type="submit">Create</button>
+  <a role="button" class="secondary" href="/">Cancel</a>
+</form>
+{% endblock %}
