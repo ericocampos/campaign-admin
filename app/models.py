@@ -1,14 +1,14 @@
 import enum
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 
-from sqlalchemy import Date, DateTime, Enum, ForeignKey, Index, Integer, JSON, String, Text
+from sqlalchemy import JSON, Date, DateTime, Enum, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class TimestampMixin:
@@ -20,7 +20,7 @@ class TimestampMixin:
     )
 
 
-class CampaignStatus(str, enum.Enum):
+class CampaignStatus(enum.StrEnum):
     draft = "draft"
     active = "active"
     paused = "paused"
@@ -58,7 +58,7 @@ class Campaign(Base, TimestampMixin):
     )
 
 
-class StepStatus(str, enum.Enum):
+class StepStatus(enum.StrEnum):
     planned = "planned"
     live = "live"
     done = "done"
@@ -90,7 +90,7 @@ class Step(Base, TimestampMixin):
     __table_args__ = (Index("ix_steps_campaign_sequence", "campaign_id", "sequence"),)
 
 
-class ChecklistStatus(str, enum.Enum):
+class ChecklistStatus(enum.StrEnum):
     pending = "pending"
     done = "done"
     blocked = "blocked"

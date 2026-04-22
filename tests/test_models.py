@@ -3,7 +3,15 @@ from datetime import date
 import pytest
 from sqlalchemy.exc import IntegrityError
 
-from app.models import Campaign, CampaignStatus
+from app.models import (
+    Campaign,
+    CampaignStatus,
+    ChecklistItem,
+    ChecklistStatus,
+    LogEntry,
+    Step,
+    StepStatus,
+)
 
 
 def test_campaign_create_with_defaults(session):
@@ -35,9 +43,6 @@ def test_campaign_status_transitions(session):
     assert c.status == CampaignStatus.paused
 
 
-from app.models import Step, StepStatus
-
-
 def test_step_belongs_to_campaign(session):
     c = Campaign(slug="c1", name="C1")
     session.add(c)
@@ -63,9 +68,6 @@ def test_step_cascade_delete(session):
     assert session.get(Step, step_id) is None
 
 
-from app.models import ChecklistItem, ChecklistStatus
-
-
 def test_checklist_item_create(session):
     c = Campaign(slug="c3", name="C3")
     c.checklist_items.append(
@@ -76,9 +78,6 @@ def test_checklist_item_create(session):
     session.commit()
     assert len(c.checklist_items) == 1
     assert c.checklist_items[0].text == "Do a thing"
-
-
-from app.models import LogEntry
 
 
 def test_log_entry_defaults(session):

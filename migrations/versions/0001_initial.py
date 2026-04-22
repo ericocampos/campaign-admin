@@ -5,17 +5,16 @@ Revises:
 Create Date: 2026-04-22 07:41:33.804543
 
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = '0001'
-down_revision: Union[str, Sequence[str], None] = None
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -25,7 +24,9 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('slug', sa.String(length=100), nullable=False),
     sa.Column('name', sa.String(length=200), nullable=False),
-    sa.Column('status', sa.Enum('draft', 'active', 'paused', 'done', 'archived', name='campaign_status'), nullable=False),
+    sa.Column('status', sa.Enum(
+        'draft', 'active', 'paused', 'done', 'archived', name='campaign_status',
+    ), nullable=False),
     sa.Column('start_date', sa.Date(), nullable=True),
     sa.Column('end_date', sa.Date(), nullable=True),
     sa.Column('overview', sa.Text(), nullable=False),
@@ -40,7 +41,9 @@ def upgrade() -> None:
     sa.Column('group_name', sa.String(length=100), nullable=True),
     sa.Column('sequence', sa.Integer(), nullable=False),
     sa.Column('text', sa.String(length=500), nullable=False),
-    sa.Column('status', sa.Enum('pending', 'done', 'blocked', name='checklist_status'), nullable=False),
+    sa.Column('status', sa.Enum(
+        'pending', 'done', 'blocked', name='checklist_status',
+    ), nullable=False),
     sa.Column('done_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('notes', sa.Text(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
@@ -48,7 +51,10 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['campaign_id'], ['campaigns.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('ix_checklist_campaign_group_seq', 'checklist_items', ['campaign_id', 'group_name', 'sequence'], unique=False)
+    op.create_index(
+        'ix_checklist_campaign_group_seq', 'checklist_items',
+        ['campaign_id', 'group_name', 'sequence'], unique=False,
+    )
     op.create_table('log_entries',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('campaign_id', sa.Integer(), nullable=False),
@@ -65,14 +71,19 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_log_entries_category'), 'log_entries', ['category'], unique=False)
-    op.create_index('ix_logs_campaign_category_time', 'log_entries', ['campaign_id', 'category', 'occurred_at'], unique=False)
+    op.create_index(
+        'ix_logs_campaign_category_time', 'log_entries',
+        ['campaign_id', 'category', 'occurred_at'], unique=False,
+    )
     op.create_table('steps',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('campaign_id', sa.Integer(), nullable=False),
     sa.Column('sequence', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=200), nullable=False),
     sa.Column('channel', sa.String(length=100), nullable=False),
-    sa.Column('status', sa.Enum('planned', 'live', 'done', 'skipped', name='step_status'), nullable=False),
+    sa.Column('status', sa.Enum(
+        'planned', 'live', 'done', 'skipped', name='step_status',
+    ), nullable=False),
     sa.Column('scheduled_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('posted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('url', sa.String(length=500), nullable=True),
@@ -84,7 +95,9 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['campaign_id'], ['campaigns.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('ix_steps_campaign_sequence', 'steps', ['campaign_id', 'sequence'], unique=False)
+    op.create_index(
+        'ix_steps_campaign_sequence', 'steps', ['campaign_id', 'sequence'], unique=False,
+    )
     # ### end Alembic commands ###
 
 
